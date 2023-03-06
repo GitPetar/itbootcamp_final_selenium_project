@@ -9,7 +9,8 @@ public class LoginTests extends BasicTest {
 @Test(priority = 10)
 @Description("Test #1: Visits the login page")
 void visitTheLoginPage() {
-    //TODO Postaviti EN jezik stranice
+    navPage.getLanguageButton().click();
+    navPage.getLanguageButton("EN").click();
     navPage.getLoginButton().click();
     Assert.assertTrue(driver.getCurrentUrl().contains("/login"), "Current URL does not contain \"/login\"");
 }

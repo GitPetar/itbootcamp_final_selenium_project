@@ -4,6 +4,7 @@ import jdk.jfr.Description;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -19,6 +20,10 @@ void login() {
     }
     navPage.getProfileButton().click();
 }
+@AfterMethod
+void home(){
+    navPage.getHomeButton().click();
+}
 
 @Test(priority = 10)
 @Description("Test #1: Visits the profile page")
@@ -26,17 +31,17 @@ void visitsTheProfilePage() throws InterruptedException {
     Assert.assertTrue(driver.getCurrentUrl().contains("/profile"), "Current url does not contain \"/profile\"");
     Assert.assertEquals(profilePage.getEmailInput().getAttribute("value"), "admin@admin.com",
     "Attribute value of " + "retrieved" + " elemen does not equal \"admin@admin.com\"");
-    navPage.getLogoutButton().click();
 }
 
 @Test(priority = 20)
 @Description("Test #2: Checks input types")
 void checksInputTypes() {
+    boolean hasValue = false;
     SoftAssert softAssert = new SoftAssert();
     softAssert.assertEquals(profilePage.getEmailInput().getAttribute("type"), "email",
     "input type does not equal " + "\"email\"");
-    softAssert.assertEquals(profilePage.getEmailInput().getAttribute("disabled"), "disabled",
-    "input disabled does " + "not " + "equal \"disabled\"");//TODO
+    softAssert.assertEquals(profilePage.getEmailInput().getAttribute("disabled"), "true", "input disabled does " +
+    "not" + " " + "equal \"disabled\"");
     softAssert.assertEquals(profilePage.getNameInput().getAttribute("type"), "text", "input type does not equal " +
     "\"text\"");
     softAssert.assertEquals(profilePage.getCityInput().getAttribute("type"), "text", "input type does not equal " +
@@ -49,7 +54,6 @@ void checksInputTypes() {
     "\"url\"");
     softAssert.assertEquals(profilePage.getPhoneInput().getAttribute("type"), "tel", "input type does not equal " +
     "\"tel\"");
-    navPage.getLogoutButton();
     softAssert.assertAll();
 }
 
@@ -82,6 +86,5 @@ void editsProfile() throws InterruptedException {
     softAssert.assertTrue(profilePage.getGitHubInput().getAttribute("value").contains("https://github.com/gitpetar"),
     "GitHub input" + " does not contain expected value");
     softAssert.assertAll();
-    navPage.getLogoutButton().click();
 }
 }

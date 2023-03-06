@@ -14,7 +14,7 @@ void login() {
     if (!isLoggedIn) {
         helper.login(driver, wait);
         isLoggedIn = true;
-        //TODO jel valja ovako?
+        
     }
 }
 
@@ -57,9 +57,8 @@ void editCity() throws InterruptedException {
     citiesPage.waitForRowsToBe(1);
     citiesPage.getEditButton(1).click();
     //clear method doesn't work
-    for (int i = 0; i < 50; i++) {
-        citiesPage.getItemInput().sendKeys(Keys.BACK_SPACE);
-    }
+    citiesPage.getItemInput().sendKeys(Keys.CONTROL+"a");
+    citiesPage.getItemInput().sendKeys(Keys.BACK_SPACE);
     citiesPage.getItemInput().sendKeys("Petar Kotevski's City Edited");
     citiesPage.getItemSaveButton().click();
     Assert.assertTrue(citiesPage.getSaveMessage().getText().contains("Saved successfully"));

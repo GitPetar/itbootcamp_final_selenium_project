@@ -1,9 +1,6 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -13,6 +10,11 @@ public ProfilePage(WebDriver driver, WebDriverWait wait) {
 }
 
 public WebElement getEmailInput() {
+    try {
+        wait.until(ExpectedConditions.attributeToBeNotEmpty(driver.findElement(By.id("email")), "disabled"));
+    } catch (StaleElementReferenceException e) {
+        return getEmailInput();
+    }
     return driver.findElement(By.id("email"));
 }
 
@@ -36,9 +38,9 @@ private void waitForElementsToHaveValue() {
 
 private void clearElement(WebElement webElement) {
     String value = webElement.getAttribute("value");
-    for (int i = 0; i < value.length(); i++) {
-        webElement.sendKeys(Keys.BACK_SPACE);
-    }
+    webElement.click();
+    webElement.sendKeys(Keys.CONTROL + "a");
+    webElement.sendKeys(Keys.BACK_SPACE);
     if (!webElement.getAttribute("value").equals("")) {
         clearElement(webElement);
     }
@@ -90,5 +92,9 @@ public WebElement getMessage() {
     wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[contains(text(),'Profile saved " +
     "successfuly')]"))));
     return driver.findElement(By.xpath("//*[contains(text(),'Profile saved successfuly')]"));
+}
+
+public void waitForAttributeToHaveValue(WebElement webElement, String attribute) {
+    wait.until(ExpectedConditions.attributeToBeNotEmpty(webElement, attribute));
 }
 }
